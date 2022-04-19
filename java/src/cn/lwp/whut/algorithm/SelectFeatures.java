@@ -66,27 +66,20 @@ public class SelectFeatures {
 	
 
 	/**
-	 * FeatureRanking + Classifier
+	 * FeatureRanking
 	 * @param train
 	 * @param test
 	 * @param featurePath
-	 * @param predsPath
 	 * @throws Exception
 	 */
 	public static void applyFeatureRankingClassifier(Instances train,
-			Instances test, String featurePath, String predsPath) throws Exception {
+			Instances test, String featurePath) throws Exception {
 		
 		Method[] featureSelectionMethods = FilterFeatureRanking.class.getDeclaredMethods();
-		Method[] classificationMethods = ClassificationModels.class.getDeclaredMethods();
 		
 		File file1 = new File(featurePath);
 		if(!file1.exists()){
 			file1.mkdirs();
-		}
-		
-		File file2 = new File(predsPath);
-		if(!file2.exists()){
-			file2.mkdirs();
 		}
 		
 		for (Method featureSelectionMethod : featureSelectionMethods) {
@@ -112,58 +105,29 @@ public class SelectFeatures {
 			 */
 			writeFile2Txt(featurePath + "\\FeatureRanking.txt", line);
 			System.out.println("Feature selection method:" + featureSelectionMethod.getName() + " selected feature columns:" + feature);
-
-			Instances trainIns = instances.get(0);
-			Instances testIns = instances.get(1);
-
-			for (Method classificationMethod : classificationMethods) {
-				Classifier classifier = (Classifier) classificationMethod.invoke(null);
-				System.out.println("Feature selection method:" + featureSelectionMethod.getName() + " with classifier:"
-						+ classificationMethod.getName() + " training...");
-				classifier.buildClassifier(trainIns);
-				int len = testIns.toArray().length;
-			
-				for(int i = 0; i < len ;i++){
-					double pred = classifier.distributionForInstance(testIns.instance(i))[1];
-					String content = String.valueOf(pred) + "\n";
-					File file3 = new File(predsPath + "\\FeatureRanking\\" + featureSelectionMethod.getName());
-					if(!file3.exists()) {
-						file3.mkdirs();
-					}
-					writeFile2Txt(predsPath + "\\FeatureRanking\\" + featureSelectionMethod.getName() + 
-							"\\" + classificationMethod.getName() + ".txt", content);		
-				}
-			}
 		}
+		
 		System.out.println("FeatureRanking finish!");
 	}
 
 
 	/**
-	 * FeatureSubsetSelection + Classifier
+	 * FeatureSubsetSelection
 	 * @param train
 	 * @param test
 	 * @param featurePath
-	 * @param predsPath
 	 * @throws Exception
 	 */
 	public static void applySubSetSelectionClassifier(Instances train,
-			Instances test, String featurePath, String predsPath) throws Exception {
+			Instances test, String featurePath) throws Exception {
 
 		Method[] subSetSelectionMethods = FilterSubsetSelection.class.getDeclaredMethods();
-		Method[] classificationMethods = ClassificationModels.class.getDeclaredMethods();
 		Method[] searchMethods = SearchMethod.class.getDeclaredMethods();
 		
 		File file1 = new File(featurePath);
 		if(!file1.exists()){
 			file1.mkdirs();
 		}
-		
-		File file2 = new File(predsPath);
-		if(!file2.exists()){
-			file2.mkdirs();
-		}
-		
 		
 		for (Method subSetSelectionMethod : subSetSelectionMethods) {
 			
@@ -195,32 +159,9 @@ public class SelectFeatures {
 				writeFile2Txt(featurePath + "\\SubSetSelection.txt", line);
 				System.out.println("feature selection and search method:" + subSetSelectionMethod.getName() + "-" + searchMethod.getName() + 
 						" selected feature columns:" + feature);
-
-				Instances trainIns = instances.get(0);
-				Instances testIns = instances.get(1);
-
-				for (Method classificationMethod : classificationMethods) {
-					Classifier classifier = (Classifier) classificationMethod.invoke(null);
-					System.out.println("feature selection and search method:" + subSetSelectionMethod.getName() + "-" + searchMethod.getName() + 
-							" with classifier" + classificationMethod.getName() + " training...");
-
-					classifier.buildClassifier(trainIns);
-					int len = testIns.toArray().length;
-			
-					for(int i = 0; i < len ;i++){
-						double pred = classifier.distributionForInstance(testIns.instance(i))[1];
-						String content = String.valueOf(pred) + "\n";
-						File file3 = new File(predsPath + "\\SubSetSelection\\" + subSetSelectionMethod.getName() + 
-								"-" + searchMethod.getName());
-						if(!file3.exists()) {
-							file3.mkdirs();
-						}
-						writeFile2Txt(predsPath + "\\SubSetSelection\\" + subSetSelectionMethod.getName() + 
-								"-" + searchMethod.getName() + "\\" + classificationMethod.getName() + ".txt", content);		
-					}
-				}
 			}
 		}
+		
 		System.out.println("SubsetSelection finish!");
 
 	}
@@ -275,50 +216,6 @@ public class SelectFeatures {
 
 	
 	/**
-	 * None Feature + Classifier
-	 * @param train
-	 * @param test
-	 * @param featurePath
-	 * @param predsPath
-	 * @throws Exception
-	 */
-	public static void applyNoneFeatureClassifier(Instances train,
-			Instances test, String featurePath, String predsPath)throws Exception {
-
-		Method[] classificationMethods = ClassificationModels.class.getDeclaredMethods();
-		File file1 = new File(featurePath);
-		if(!file1.exists()){
-			file1.mkdirs();
-		}
-		
-		File file2 = new File(predsPath);
-		if(!file2.exists()){
-			file2.mkdirs();
-		}
-		
-		for (Method classificationMethod : classificationMethods) {
-			Classifier classifier = (Classifier) classificationMethod.invoke(null);
-			
-			System.out.println("None with classifer:" + classificationMethod.getName() + " training...");
-			
-			classifier.buildClassifier(train);
-			int len = test.toArray().length;
-			
-			for(int i = 0; i < len ;i++){
-				double pred = classifier.distributionForInstance(test.instance(i))[1];
-				String content = String.valueOf(pred) + "\n";
-				File file3 = new File(predsPath + "\\NoneFeature");
-				if(!file3.exists()) {
-					file3.mkdirs();
-				}
-				writeFile2Txt(predsPath + "\\NoneFeature\\" + classificationMethod.getName() + ".txt", content);		
-			}		
-		}
-		System.out.println("None finish!");
-	}
-
-	
-	/**
 	 * Search for Feature Ranking
 	 *
 	 * @return
@@ -335,12 +232,11 @@ public class SelectFeatures {
 	 * @param trainpath
 	 * @param testpath
 	 * @param featurePath
-	 * @param predsPath
 	 * @param featureMethod
 	 * @throws Exception
 	 */
 	public static void FeatureSelection(String trainpath, String testpath, 
-			 String featurePath, String predsPath, String featureMethod)  throws Exception { 
+			 String featurePath, String featureMethod)  throws Exception { 
 
 	        Instances ins1 = null;
 			Instances ins2 = null;
@@ -366,18 +262,14 @@ public class SelectFeatures {
 
 	        switch (featureMethod){
 	            case ("Ranking"):
-	            	applyFeatureRankingClassifier(train, test, featurePath, predsPath);
+	            	applyFeatureRankingClassifier(train, test, featurePath);
 	                break;
 	            case ("Subset"):
-	            	applySubSetSelectionClassifier(train, test, featurePath, predsPath);
-	            	break;
-	            case ("None"):
-	            	applyNoneFeatureClassifier(train, test, featurePath, predsPath);
+	            	applySubSetSelectionClassifier(train, test, featurePath);
 	            	break;
 	            default:
 	                System.out.println("Not choose");
 	        }
-
 	}
 
 }
