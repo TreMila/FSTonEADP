@@ -14,7 +14,8 @@
     * Mian.java: The main method to run the whole java codes
 ## python: python codes 
 * CrossVersionData: Training and testing datasets pairs
-* lib: The libraries that the algorithm needs to call (sklearn, numpy, pandas, etc)
+* lib: The packages that the algorithm needs to call (sklearn, numpy, pandas, etc)
+ * packages.zip: The compressed packages (sklearn, numpy, pandas, etc)
 * src: Python code files
   * configuration.py: Store the file paths
   * classifiers.py: The classification models we studied
