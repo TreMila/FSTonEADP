@@ -27,10 +27,6 @@ public class Main {
 			File dir = new File(csvPath + "\\" + dirList[i]);
 			
 			String featurePath = "D:\\python\\Feature_Select\\Feature\\" + dirList[i];
-			String predsPath = "D:\\python\\Feature_Select\\predDistribution\\" + dirList[i];
-//			
-//			System.out.println(featurePath);
-//			System.out.println(predsPath);
 			
 			String[] fileList = dir.list();
 
@@ -46,9 +42,9 @@ public class Main {
 			System.out.println(testPath);
 			
 			/**
-			 * here 'Ranking' can be replaced with 'Subset' and 'None'
+			 * here 'Ranking' can be replaced with 'Subset'
 			 */
-			SelectFeatures.FeatureSelection(trainPath, testPath, featurePath, predsPath, "Ranking");
+			SelectFeatures.FeatureSelection(trainPath, testPath, featurePath, "Ranking");
 		}
 
 		Date endTime = new Date(System.currentTimeMillis());
