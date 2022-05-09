@@ -15,7 +15,7 @@
 ## python: python codes 
 * CrossVersionData: Training and testing datasets pairs
 * lib: The packages that the algorithm needs to call (sklearn, numpy, pandas, etc)
-  * packages.zip: The compressed packages (sklearn, numpy, pandas, etc)
+  * packages.zip: The compressed packages (sklearn, numpy, pandas, etc). It is recommended to download this zip package separately here.
 * src: Python code files
   * configuration.py: Store the file paths
   * classifiers.py: The classification models we studied
